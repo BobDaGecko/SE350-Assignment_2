@@ -31,16 +31,18 @@ public class TextUI {
     public void play(Dungeon d) {
         // Display welcome message
         System.out.println("\n========== WELCOME TO THE DUNGEON ADVENTURE ==========");
-        System.out.println("You are " + d.getPlayer().getName() + ", on a quest to escape the dungeon.");
-        System.out.println("Navigate through chambers, collect items, and defeat monsters to reach the exit!");
+        System.out.println(
+                "You are " + d.getPlayer().getName() + ", on a quest to escape the dungeon.");
+        System.out.println(
+                "Navigate through chambers, collect items, and defeat monsters to reach the exit!");
         System.out.println("======================================================\n");
-        
+
         while (!d.isFinished()) {
             print(d);
             Action a = ask(d);
             a.execute();
         }
-        
+
         // Display closing message
         System.out.println("\n========== GAME OVER ==========");
         if (d.getPlayer().isDefeated()) {
