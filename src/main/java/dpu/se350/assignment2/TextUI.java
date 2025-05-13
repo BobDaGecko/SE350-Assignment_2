@@ -22,6 +22,12 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class TextUI {
+    private BufferedReader reader;
+
+    public TextUI() {
+        reader = new BufferedReader(new InputStreamReader(System.in));
+    }
+
     public void play(Dungeon d) {
         while (!d.isFinished()) {
             print(d);
@@ -36,8 +42,32 @@ public class TextUI {
         StringBuilder s = new StringBuilder();
         s.append("You are in a chamber with " + r.getDoors().size() + " doors\n");
         s.append("There are " + r.getItems().size() + " items in the chamber\n");
-        // TODO: print for each door which monster is there, how strong it is, how skilled in craft,
-        // and how healthy
+
+        // Print information about each door and its guarding monster
+        List<Door> doors = r.getDoors();
+        if (!doors.isEmpty()) {
+            s.append("\nDoor information:\n");
+            for (int i = 0; i < doors.size(); i++) {
+                Door door = doors.get(i);
+                s.append("\tDoor " + i + ": ");
+
+                Monster monster = door.getMonster();
+                if (monster != null) {
+                    if (monster.isDefeated()) {
+                        s.append("Guarded by a defeated " + monster.getClass().getSimpleName());
+                    } else {
+                        s.append("Guarded by a " + monster.getClass().getSimpleName());
+                        s.append(" (Strength: " + monster.getStrength());
+                        s.append(", Craft: " + monster.getCraft());
+                        s.append(", Health: " + monster.getHealth() + ")");
+                    }
+                } else {
+                    s.append("Unguarded");
+                }
+                s.append("\n");
+            }
+        }
+
         System.out.println(s.toString());
     }
 
@@ -53,7 +83,6 @@ public class TextUI {
         System.out.println(s.toString());
 
         // ask for action
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         try {
             int command = Integer.parseInt(reader.readLine());
             return actions.get(command);
